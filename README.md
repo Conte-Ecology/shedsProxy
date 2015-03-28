@@ -9,6 +9,7 @@ The proxy server configuration is defined in a `config.js` file. An example of t
 The configuration includes two properties:
 
 - `port`: the port that the proxy server will listen on
+- `maintenance`: boolean flag to enable maintenance mode
 - `router`: a router table with keys being the incoming `host:port` and values being the target address. Note that the target address must be fully qualified (e.g. include `http://`)
 
 ## Logging

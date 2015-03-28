@@ -22,7 +22,8 @@ var log = bunyan.createLogger({
 // https://blog.nodejitsu.com/node-http-proxy-1dot0/
 
 var port = config.port || 3000,
-    router = config.router;
+    router = config.router || {},
+    maintenance = config.maintenance || false;
 
 // set up proxy server
 var app = http.createServer(function(req, res) {
@@ -33,10 +34,19 @@ var app = http.createServer(function(req, res) {
   log.info({
       req: req,
       reqId: req.reqId,
-      target: router[req.headers.host]
+      target: router[req.headers.host],
+      maintenance: maintenance
     }, 'received request');
 
-  if (target) {
+  if (maintenance) {
+    log.info({
+        reqId: req.reqId
+      }, 'maintenance mode');
+    res.writeHead(404, {
+      'Content-Type': 'text/plain'
+    });
+    res.end('Server is undergoing maintenance, please check back soon.');
+  } else if (target) {
     proxy.web(req, res, { target: router[req.headers.host] });
   } else {
     // request host not found in router
