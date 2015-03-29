@@ -42,7 +42,7 @@ var app = http.createServer(function(req, res) {
     log.info({
         reqId: req.reqId
       }, 'maintenance mode');
-    res.writeHead(404, {
+    res.writeHead(503, {
       'Content-Type': 'text/plain'
     });
     res.end('Server is undergoing maintenance, please check back soon.');
